@@ -89,6 +89,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Maven & Java
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-setup@main
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.2.1
         with:
