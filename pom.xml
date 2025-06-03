@@ -9,6 +9,8 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
+  
+
   <groupId>com.unir</groupId>
   <artifactId>spring-boot-template</artifactId>
   <version>${revision}</version>
