@@ -28,7 +28,7 @@ public class BooksController {
     public ResponseEntity<Book> getBookById(@PathVariable("id") UUID id) {
         try {
             return ResponseEntity.ok(booksService.getBookById(id));
-        } catch (RuntimeException e) {
+        } catch (RuntimeException _) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -48,7 +48,7 @@ public class BooksController {
     public ResponseEntity<Book> updateBook(@PathVariable("id") UUID id, Book book) {
         try {
             return ResponseEntity.ok(booksService.updateBook(id, book));
-        } catch (RuntimeException e) {
+        } catch (RuntimeException _) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -57,7 +57,7 @@ public class BooksController {
     public ResponseEntity<Book> deleteBook(@PathVariable("id") UUID id) {
         try {
             return ResponseEntity.ok(booksService.deleteBook(id));
-        } catch (RuntimeException e) {
+        } catch (RuntimeException _) {
             return ResponseEntity.notFound().build();
         }
     }
