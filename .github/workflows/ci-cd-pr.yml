@@ -111,6 +111,9 @@ jobs:
           
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
+      - name: Package
+        run: mvn -B -ntp clean package -Drevision=${{ needs.sonar.outputs.revision }} -DskipTests=true
+
       - name: Build Docker image
         run: |
           docker build -t ${{ steps.vars.outputs.image_uri }} .
