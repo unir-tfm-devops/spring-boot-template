@@ -1,0 +1,36 @@
+# Only tagged branches can be merged to main
+
+name: PR checks
+on:
+  pull_request:
+    types: [ labeled, unlabeled, opened, edited, synchronize ]
+
+jobs:
+  check_branch_name_if_main:
+    name: Check branch name
+    runs-on: [ ubuntu-latest ]
+    if:
+      contains('refs/heads/main', github.base_ref) == true
+    steps:
+      - name: Checking name
+        id: check-name
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          if [[ $BRANCH_NAME =~ ^(bug/.+)|(feature/.+)|(fix/.+)|(enhancement/.+)|(documentation/.+)|(release/.+)$ ]]; then
+              echo ::set-output name=match::true
+          fi
+      - name: Exiting if not true
+        if: steps.check-name.outputs.match != 'true'
+        run: exit 1
+
+  enforce_label_if_main:
+    name: Enforce tags
+    runs-on: [ ubuntu-latest ]
+    if:
+      contains('refs/heads/main', github.base_ref) == true
+    steps:
+      - uses: yogevbd/enforce-label-action@2.2.2
+        with:
+          REQUIRED_LABELS_ANY: "breaking-change,bug,documentation,enhancement,feature,deprecation,dependency"
+          REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label in ['breaking-change', 'bug', 'documentation', 'enhancement', 'feature', 'deprecation', 'dependency']"
