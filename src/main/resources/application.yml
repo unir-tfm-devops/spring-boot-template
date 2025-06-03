@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: spring-boot-template
+server:
+  port: 8080
