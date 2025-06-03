@@ -1,5 +1,3 @@
-# Only tagged branches can be merged to main
-
 name: PR checks
 
 on:
@@ -11,11 +9,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check_branch_name_if_main:
+  check_branch_name:
     name: Check branch name
     runs-on: [ ubuntu-latest ]
-    if:
-      contains('refs/heads/main', github.base_ref) == true
     steps:
       - name: Checking name
         id: check-name
@@ -29,11 +25,9 @@ jobs:
         if: steps.check-name.outputs.match != 'true'
         run: exit 1
 
-  enforce_label_if_main:
+  enforce_label:
     name: Enforce tags
     runs-on: [ ubuntu-latest ]
-    if:
-      contains('refs/heads/main', github.base_ref) == true
     steps:
       - uses: yogevbd/enforce-label-action@2.2.2
         with:
