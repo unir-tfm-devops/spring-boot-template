@@ -23,7 +23,7 @@
     <liquibase.version>4.32.0</liquibase.version>
     <instancio.version>5.4.1</instancio.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
-    <jacoco.version>0.8.12</jacoco.version>
+    <jacoco.version>0.8.13</jacoco.version>
   </properties>
 
   <dependencies>
