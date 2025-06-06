@@ -55,7 +55,6 @@ jobs:
           name: maven-target
           path: target
 
-
       - name: Publish reports
         if: always() && github.event_name == 'pull_request'
         uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-failsafe-surefire-report@main
@@ -100,3 +99,5 @@ jobs:
         with:
           image-repo-name: spring-boot-template
           image-tag: ${{ needs.sonar.outputs.revision }}
+          aws-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-key: ${{ secrets.AWS_SECRET_KEY }}
