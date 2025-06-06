@@ -92,35 +92,11 @@ jobs:
       - name: Setup Maven & Java
         uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-setup@main
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.2.1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Set image variables
-        id: vars
-        run: |
-          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          IMAGE_REPO_NAME=unir-tfm-docker-repo
-          REVISION=${{ needs.sonar.outputs.revision }}
-          IMAGE_TAG=${REVISION:-latest}
-          IMAGE_URI=$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
-          
-          echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
-
       - name: Package
         run: mvn -B -ntp clean package -Drevision=${{ needs.sonar.outputs.revision }} -DskipTests=true
 
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ steps.vars.outputs.image_uri }} .
-
-      - name: Push Docker image
-        run: |
-          docker push ${{ steps.vars.outputs.image_uri }}
+      - name: Docker build & push
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/docker-build-push@main
+        with:
+          image-repo-name: spring-boot-template
+          image-tag: ${{ needs.sonar.outputs.revision }}
