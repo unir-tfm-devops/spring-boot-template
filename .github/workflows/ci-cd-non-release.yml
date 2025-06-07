@@ -104,3 +104,17 @@ jobs:
           image-tag: ${{ needs.sonar.outputs.revision }}
           aws-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-key: ${{ secrets.AWS_SECRET_KEY }}
+
+  helm:
+    name: Helm Package & Push
+    runs-on: ubuntu-latest
+    needs: [ sonar ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Helm package & push
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/helm-package-push@main
+        with:
+          chart-version: ${{ needs.sonar.outputs.revision }}
+          chartmuseum-url: ${{ secrets.CHARTMUSEUM_URL }}

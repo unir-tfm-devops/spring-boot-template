@@ -79,3 +79,17 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  helm:
+    name: Helm Validation
+    runs-on: ubuntu-latest
+    needs: [ revision ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Helm Lint
+        run: helm lint helm
