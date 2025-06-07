@@ -92,4 +92,4 @@ jobs:
         uses: unir-tfm-devops/reusable-github-actions/.github/actions/helm-package-push@main
         with:
           chart-version: ${{ needs.revision.outputs.revision }}
-          chartmuseum-url: ${{ vars.CHARTMUSEUM_URL }}
+          chartmuseum-url: ${{ secrets.CHARTMUSEUM_URL }}
