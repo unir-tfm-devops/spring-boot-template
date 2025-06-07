@@ -83,7 +83,7 @@ jobs:
   helm:
     name: Helm Package & Push
     runs-on: ubuntu-latest
-    needs: [ sonar ]
+    needs: [ revision ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -97,9 +97,9 @@ jobs:
       - name: Package Helm chart
         run: |
           helm dependency update helm
-          helm package helm --version ${{ needs.sonar.outputs.revision }} --app-version ${{ needs.sonar.outputs.revision }}
+          helm package helm --version ${{ needs.revision.outputs.revision }} --app-version ${{ needs.revision.outputs.revision }}
 
       - name: Push chart to ChartMuseum
         run: |
           CHART_PACKAGE=$(ls *.tgz)
-          helm push "$CHART_PACKAGE" chartmuseum
+          helm cm-push "$CHART_PACKAGE" chartmuseum
