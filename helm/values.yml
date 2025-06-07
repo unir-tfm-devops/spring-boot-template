@@ -1,0 +1,20 @@
+replicaCount: 1
+
+image:
+  repository: your-dockerhub-username/spring-boot-template
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
