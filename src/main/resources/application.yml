@@ -1,5 +1,12 @@
 spring:
   application:
     name: spring-boot-template
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/template_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 server:
   port: 8080
