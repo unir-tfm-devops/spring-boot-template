@@ -48,3 +48,6 @@ coverage/
 
 # IDE caches
 /out/
+
+# Vscode
+.vscode/

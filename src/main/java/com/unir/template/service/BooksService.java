@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public interface BooksService {
 
-    List<Book> getAllBooks();
+  List<Book> getAllBooks();
 
-    Book getBookById(UUID id);
+  Book getBookById(UUID id);
 
-    Book createBook(Book book);
+  Book createBook(Book book);
 
-    Book updateBook(UUID id, Book book);
+  Book updateBook(UUID id, Book book);
 
-    Book deleteBook(UUID id);
+  Book deleteBook(UUID id);
 }

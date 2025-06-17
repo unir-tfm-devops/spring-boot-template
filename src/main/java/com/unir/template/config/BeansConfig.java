@@ -9,9 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BeansConfig {
 
-    @Bean
-    public BooksService booksService(BooksRepository booksRepository) {
-        return new BooksServiceImpl(booksRepository);
-    }
-
+  @Bean
+  public BooksService booksService(BooksRepository booksRepository) {
+    return new BooksServiceImpl(booksRepository);
+  }
 }

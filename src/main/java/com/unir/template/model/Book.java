@@ -19,13 +19,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Book {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    private String name;
-    private String description;
-    private Double price;
-    private Integer stock;
-
+  private String name;
+  private String description;
+  private Double price;
+  private Integer stock;
 }
