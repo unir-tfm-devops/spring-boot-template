@@ -1,21 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "spring-boot-template.fullname" . }}
+  labels:
+    {{- include "spring-boot-template.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      {{- include "spring-boot-template.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        {{- include "spring-boot-template.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: spring-boot-template
+        - name: {{ include "spring-boot-template.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- if .Values.env }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.secrets.enabled }}
+            {{- range $key, $value := .Values.secrets.data }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.secrets.secretName }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
