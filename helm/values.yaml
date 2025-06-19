@@ -1,20 +1,57 @@
+# -- Override the name of the chart
+nameOverride: "spring-boot-template"
+
+# -- Override the full name of the chart
+fullnameOverride: "spring-boot-template"
+
+# -- Number of replicas to deploy
 replicaCount: 1
 
+# -- Image configuration
 image:
+  # -- Docker image repository
   repository: your-dockerhub-username/spring-boot-template
+  # -- Docker image tag
   tag: latest
+  # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
+# -- Service configuration
 service:
+  # -- Kubernetes service type
   type: ClusterIP
+  # -- Service port
   port: 80
+  # -- Target port for the application
   targetPort: 8080
 
+# -- Resource configuration
 resources:
   requests:
+    # -- Memory request
     memory: "512Mi"
+    # -- CPU request
     cpu: "250m"
   limits:
+    # -- Memory limit
     memory: "512Mi"
+    # -- CPU limit
     cpu: "500m"
+
+# -- Environment variables configuration
+env:
+  # -- Database URL for PostgreSQL connection
+  DB_URL: "jdbc:postgresql://postgres:5432/template_db"
+  # -- Database username
+  DB_USERNAME: "postgres"
+
+# -- Secret configuration for sensitive data
+secrets:
+  # -- Enable Kubernetes secrets for sensitive data
+  enabled: true
+  # -- Name of the Kubernetes secret
+  secretName: "spring-boot-template-secret"
+  data:
+    # -- Database password
+    DB_PASSWORD: "postgres"
 
