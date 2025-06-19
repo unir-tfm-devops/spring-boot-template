@@ -70,6 +70,9 @@ jobs:
         with:
           name: maven-target
           path: target
+      
+      - name: Run Integration Tests
+        run: mvn -B -ntp failsafe:integration-test failsafe:verify -Drevision=${{ needs.revision.outputs.revision }}
 
       - name: Publish reports
         if: always() && github.event_name == 'pull_request'
