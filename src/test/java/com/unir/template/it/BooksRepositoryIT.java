@@ -25,7 +25,7 @@ class BooksRepositoryIT {
 
   @Container
   static PostgreSQLContainer<?> postgres =
-      new PostgreSQLContainer<>("postgres:15-alpine")
+      new PostgreSQLContainer<>("postgres:16.8-alpine")
           .withDatabaseName("test_db")
           .withUsername("test_user")
           .withPassword("test_password");
