@@ -1,0 +1,105 @@
+name: 'CI/CD (Release)'
+
+on:
+  release:
+    types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Format Check
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Maven & Java
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-setup@main
+
+      - name: Run Spotless Check
+        run: mvn -B -ntp spotless:check
+
+  test:
+    name: Tests
+    runs-on: [ ubuntu-latest ]
+    needs: [ format ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Maven & Java
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-setup@main
+
+      - name: Run Unit Tests
+        run: mvn -B -ntp clean test -Drevision=${{ github.event.release.tag_name }}
+
+      - name: Upload target directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-target
+          path: target
+      
+      - name: Run Integration Tests
+        run: mvn -B -ntp failsafe:integration-test failsafe:verify -Drevision=${{ github.event.release.tag_name }}
+
+      - name: Publish reports
+        if: always() && github.event_name == 'pull_request'
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-failsafe-surefire-report@main
+
+  sonar:
+    name: SonarQube Analysis
+    runs-on: [ ubuntu-latest ]
+    needs: [ test ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download target directory
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-target
+          path: target
+
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  docker:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [ sonar ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Maven & Java
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-setup@main
+
+      - name: Package
+        run: mvn -B -ntp clean package -Drevision=${{ github.event.release.tag_name }} -DskipTests=true
+
+      - name: Docker build & push
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/docker-build-push@main
+        with:
+          image-repo-name: spring-boot-template
+          image-tag: ${{ github.event.release.tag_name }}
+          aws-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-key: ${{ secrets.AWS_SECRET_KEY }}
+
+  helm:
+    name: Helm Package & Push
+    runs-on: ubuntu-latest
+    needs: [ sonar ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Helm package & push
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/helm-package-push@main
+        with:
+          chart-version: ${{ github.event.release.tag_name }}
+          chartmuseum-url: ${{ secrets.CHARTMUSEUM_URL }}
