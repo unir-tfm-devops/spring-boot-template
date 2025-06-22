@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +43,7 @@ public class BooksController {
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public Book createBook(Book book) {
+  public Book createBook(@RequestBody Book book) {
     return booksService.createBook(book);
   }
 
@@ -50,7 +51,7 @@ public class BooksController {
       value = "/{id}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Book> updateBook(@PathVariable("id") UUID id, Book book) {
+  public ResponseEntity<Book> updateBook(@PathVariable("id") UUID id, @RequestBody Book book) {
     try {
       return ResponseEntity.ok(booksService.updateBook(id, book));
     } catch (RuntimeException _) {
