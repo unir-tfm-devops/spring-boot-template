@@ -68,7 +68,7 @@ jobs:
           name: maven-target
           path: target
 
-      - name: Run Integration Tests
+      - name: Run Integration & E2E Tests
         run: mvn -B -ntp failsafe:integration-test failsafe:verify -Drevision=${{ needs.revision.outputs.revision }}
 
       - name: Publish reports

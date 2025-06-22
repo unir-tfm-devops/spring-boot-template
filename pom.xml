@@ -100,6 +100,13 @@
       <version>${testcontainers.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Rest Assured -->
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -189,11 +196,13 @@
             <exclude>**/*IT.java</exclude>
             <exclude>**/IT*.java</exclude>
             <exclude>**/*ITCase.java</exclude>
+            <exclude>**/*E2ETest.java</exclude>
+            <exclude>**/e2e/**/*.java</exclude>
           </excludes>
         </configuration>
       </plugin>
 
-      <!-- Maven Failsafe Plugin - for integration tests -->
+      <!-- Maven Failsafe Plugin - for integration and e2e tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -211,6 +220,8 @@
             <include>**/*IT.java</include>
             <include>**/IT*.java</include>
             <include>**/*ITCase.java</include>
+            <include>**/*E2ETest.java</include>
+            <include>**/e2e/**/*.java</include>
           </includes>
         </configuration>
       </plugin>
