@@ -17,8 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 class BooksE2ETest extends E2EContainer {
 
-  @LocalServerPort
-  private int port;
+  @LocalServerPort private int port;
 
   @BeforeEach
   void setUp() {
@@ -30,7 +29,8 @@ class BooksE2ETest extends E2EContainer {
   @Test
   void givenValidBookData_whenCreatingBook_thenBookIsCreatedAndCanBeRetrieved() {
     // Given
-    String bookJson = """
+    String bookJson =
+        """
         {
           "name": "The Great Gatsby",
           "description": "A classic American novel",
@@ -40,20 +40,21 @@ class BooksE2ETest extends E2EContainer {
         """;
 
     // When & Then - Create book
-    String bookId = given()
-        .contentType(ContentType.JSON)
-        .body(bookJson)
-        .when()
-        .post("/api/books")
-        .then()
-        .statusCode(200)
-        .body("name", equalTo("The Great Gatsby"))
-        .body("description", equalTo("A classic American novel"))
-        .body("price", equalTo(19.99f))
-        .body("stock", equalTo(10))
-        .body("id", notNullValue())
-        .extract()
-        .path("id");
+    String bookId =
+        given()
+            .contentType(ContentType.JSON)
+            .body(bookJson)
+            .when()
+            .post("/api/books")
+            .then()
+            .statusCode(200)
+            .body("name", equalTo("The Great Gatsby"))
+            .body("description", equalTo("A classic American novel"))
+            .body("price", equalTo(19.99f))
+            .body("stock", equalTo(10))
+            .body("id", notNullValue())
+            .extract()
+            .path("id");
 
     // When & Then - Retrieve the created book
     given()
@@ -73,17 +74,14 @@ class BooksE2ETest extends E2EContainer {
     UUID nonExistentId = UUID.randomUUID();
 
     // When & Then
-    given()
-        .when()
-        .get("/api/books/" + nonExistentId)
-        .then()
-        .statusCode(404);
+    given().when().get("/api/books/" + nonExistentId).then().statusCode(404);
   }
 
   @Test
   void givenMultipleBooks_whenGettingAllBooks_thenReturnsAllBooks() {
     // Given - Create multiple books
-    String book1Json = """
+    String book1Json =
+        """
         {
           "name": "Book 1",
           "description": "First book",
@@ -92,7 +90,8 @@ class BooksE2ETest extends E2EContainer {
         }
         """;
 
-    String book2Json = """
+    String book2Json =
+        """
         {
           "name": "Book 2",
           "description": "Second book",
@@ -132,7 +131,8 @@ class BooksE2ETest extends E2EContainer {
   @Test
   void givenExistingBook_whenUpdatingBook_thenBookIsUpdated() {
     // Given - Create a book first
-    String createBookJson = """
+    String createBookJson =
+        """
         {
           "name": "Original Name",
           "description": "Original description",
@@ -141,18 +141,20 @@ class BooksE2ETest extends E2EContainer {
         }
         """;
 
-    String bookId = given()
-        .contentType(ContentType.JSON)
-        .body(createBookJson)
-        .when()
-        .post("/api/books")
-        .then()
-        .statusCode(200)
-        .extract()
-        .path("id");
+    String bookId =
+        given()
+            .contentType(ContentType.JSON)
+            .body(createBookJson)
+            .when()
+            .post("/api/books")
+            .then()
+            .statusCode(200)
+            .extract()
+            .path("id");
 
     // Update book
-    String updateBookJson = """
+    String updateBookJson =
+        """
         {
           "name": "Updated Name",
           "description": "Updated description",
@@ -187,7 +189,8 @@ class BooksE2ETest extends E2EContainer {
   @Test
   void givenExistingBook_whenDeletingBook_thenBookIsDeleted() {
     // Given - Create a book first
-    String bookJson = """
+    String bookJson =
+        """
         {
           "name": "Book to Delete",
           "description": "This book will be deleted",
@@ -196,15 +199,16 @@ class BooksE2ETest extends E2EContainer {
         }
         """;
 
-    String bookId = given()
-        .contentType(ContentType.JSON)
-        .body(bookJson)
-        .when()
-        .post("/api/books")
-        .then()
-        .statusCode(200)
-        .extract()
-        .path("id");
+    String bookId =
+        given()
+            .contentType(ContentType.JSON)
+            .body(bookJson)
+            .when()
+            .post("/api/books")
+            .then()
+            .statusCode(200)
+            .extract()
+            .path("id");
 
     // When & Then - Delete the book
     given()
@@ -215,18 +219,15 @@ class BooksE2ETest extends E2EContainer {
         .body("name", equalTo("Book to Delete"));
 
     // Verify the book is deleted
-    given()
-        .when()
-        .get("/api/books/" + bookId)
-        .then()
-        .statusCode(404);
+    given().when().get("/api/books/" + bookId).then().statusCode(404);
   }
 
   @Test
   void givenNonExistentBookId_whenUpdatingBook_thenReturns404() {
     // Given
     UUID nonExistentId = UUID.randomUUID();
-    String updateBookJson = """
+    String updateBookJson =
+        """
         {
           "name": "Updated Name",
           "description": "Updated description",
@@ -251,10 +252,6 @@ class BooksE2ETest extends E2EContainer {
     UUID nonExistentId = UUID.randomUUID();
 
     // When & Then
-    given()
-        .when()
-        .delete("/api/books/" + nonExistentId)
-        .then()
-        .statusCode(404);
+    given().when().delete("/api/books/" + nonExistentId).then().statusCode(404);
   }
-} 
+}
