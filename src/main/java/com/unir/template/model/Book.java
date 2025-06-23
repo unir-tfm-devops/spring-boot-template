@@ -23,13 +23,17 @@ public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Schema(description = "Unique identifier for the book", example = "123e4567-e89b-12d3-a456-426614174000")
+  @Schema(
+      description = "Unique identifier for the book",
+      example = "123e4567-e89b-12d3-a456-426614174000")
   private UUID id;
 
   @Schema(description = "Title of the book", example = "Spring Boot in Action", required = true)
   private String name;
 
-  @Schema(description = "Description of the book", example = "A comprehensive guide to Spring Boot development")
+  @Schema(
+      description = "Description of the book",
+      example = "A comprehensive guide to Spring Boot development")
   private String description;
 
   @Schema(description = "Price of the book", example = "29.99")
