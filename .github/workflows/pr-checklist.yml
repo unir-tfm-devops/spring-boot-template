@@ -2,34 +2,14 @@ name: PR checks
 
 on:
   pull_request:
-    types: [ labeled, unlabeled, opened, edited, synchronize ]
+    types: [labeled, unlabeled, opened, edited, synchronize]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
-  check_branch_name:
-    name: Check branch name
-    runs-on: [ ubuntu-latest ]
-    steps:
-      - name: Checking name
-        id: check-name
-        env:
-          BRANCH_NAME: ${{ github.head_ref }}
-        run: |
-          if [[ $BRANCH_NAME =~ ^(bug/.+)|(feature/.+)|(fix/.+)|(enhancement/.+)|(documentation/.+)|(release/.+)$ ]]; then
-              echo ::set-output name=match::true
-          fi
-      - name: Exiting if not true
-        if: steps.check-name.outputs.match != 'true'
-        run: exit 1
-
-  enforce_label:
-    name: Enforce tags
-    runs-on: [ ubuntu-latest ]
-    steps:
-      - uses: yogevbd/enforce-label-action@2.2.2
-        with:
-          REQUIRED_LABELS_ANY: "breaking-change,bug,documentation,enhancement,feature,deprecation,dependency"
-          REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label in ['breaking-change', 'bug', 'documentation', 'enhancement', 'feature', 'deprecation', 'dependency']"
+  pr-checks:
+    name: PR format
+    uses: unir-tfm-devops/reusable-github-actions/.github/workflows/pr-checks.yml@main
+    secrets: inherit
