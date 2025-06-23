@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci-cd:
+  pr-checks:
     name: PR format
     uses: unir-tfm-devops/reusable-github-actions/.github/workflows/pr-checks.yml@main
     secrets: inherit
