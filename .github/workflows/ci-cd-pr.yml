@@ -9,5 +9,6 @@ concurrency:
 
 jobs:
   ci-cd:
+    name: CI/CD
     uses: unir-tfm-devops/reusable-github-actions/.github/workflows/ci-cd-pr.yml@main
     secrets: inherit
