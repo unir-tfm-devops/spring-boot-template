@@ -1,4 +1,4 @@
-name: 'CI/CD (Non-Release)'
+name: "CI/CD (Non-Release)"
 
 on:
   workflow_dispatch:
@@ -15,5 +15,6 @@ jobs:
     name: CI/CD
     uses: unir-tfm-devops/reusable-github-actions/.github/workflows/ci-cd-non-release.yml@main
     with:
-      app-name: 'spring-boot-template'
+      image-repo-name: "spring-boot-template"
+      app-name: "spring-boot-template"
     secrets: inherit
