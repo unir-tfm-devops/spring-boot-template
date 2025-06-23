@@ -15,7 +15,7 @@ jobs:
       - name: Version Updater
         uses: unir-tfm-devops/reusable-github-actions/.github/actions/version-updater@main
         with:
-            version: 2.0.0
+            version: 3.0.0
             app-name: 'spring-boot-template'
             environment: 'test'
             cloud: 'aws'
