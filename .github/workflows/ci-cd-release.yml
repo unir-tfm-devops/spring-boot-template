@@ -103,3 +103,35 @@ jobs:
         with:
           chart-version: ${{ github.event.release.tag_name }}
           chartmuseum-url: ${{ secrets.CHARTMUSEUM_URL }}
+
+  deploy-test:
+    name: Deploy to Test
+    runs-on: [ ubuntu-latest ]
+    needs: [ docker, helm ]
+    environment: test
+    steps:
+      - name: Update version in test environment
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/version-updater@main
+        with:
+            version: ${{ github.event.release.tag_name }}
+            app-name: 'spring-boot-template'
+            environment: 'test'
+            cloud: 'aws'
+            app-id: ${{ vars.UNIR_TFM_APP_ID }}
+            private-key: ${{ secrets.UNIR_TFM_APP_PRIVATE_KEY }}
+
+  deploy-prod:
+    name: Deploy to Production
+    runs-on: [ ubuntu-latest ]
+    needs: [ deploy-test ]
+    environment: production
+    steps:
+      - name: Update version in production environment
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/version-updater@main
+        with:
+            version: ${{ github.event.release.tag_name }}
+            app-name: 'spring-boot-template'
+            environment: 'production'
+            cloud: 'aws'
+            app-id: ${{ vars.UNIR_TFM_APP_ID }}
+            private-key: ${{ secrets.UNIR_TFM_APP_PRIVATE_KEY }}
