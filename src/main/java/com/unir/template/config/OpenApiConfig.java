@@ -18,7 +18,7 @@ public class OpenApiConfig {
     return new OpenAPI()
         .info(
             new Info()
-                .title("Spring Boot Template API")
+                .title("Spring Boot Template")
                 .description(
                     "A comprehensive REST API template built with Spring Boot 3.5.0 and Java 24. "
                         + "This template provides a solid foundation for building production-ready REST APIs "
