@@ -19,7 +19,7 @@
     <revision>0.0.0</revision>
     <java.version>24</java.version>
     <lombok.version>1.18.38</lombok.version>
-    <postgresql.version>42.7.5</postgresql.version>
+    <postgresql.version>42.7.7</postgresql.version>
     <liquibase.version>4.32.0</liquibase.version>
     <instancio.version>5.4.1</instancio.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
