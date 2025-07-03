@@ -11,7 +11,7 @@ A comprehensive template for building production-ready REST APIs using Java 24 a
 
 ## 🚀 Features
 
-- **Modern Java Stack**: Java 24 with Spring Boot 3.5.0
+- **Modern Java Stack**: Java 24 with Spring Boot 3.5.3
 - **Database Integration**: PostgreSQL with JPA/Hibernate and Liquibase for schema management
 - **Comprehensive Testing**: Unit, Integration, and E2E tests with TestContainers
 - **Code Quality**: Spotless for code formatting, JaCoCo for coverage
