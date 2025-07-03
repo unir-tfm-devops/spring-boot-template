@@ -10,9 +10,9 @@ replicaCount: 1
 # -- Image configuration
 image:
   # -- Docker image repository
-  repository: your-dockerhub-username/spring-boot-template
+  repository: 703671900078.dkr.ecr.us-east-1.amazonaws.com/spring-boot-template
   # -- Docker image tag
-  tag: latest
+  tag: 0.0.0
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -41,9 +41,9 @@ resources:
 # -- Environment variables configuration
 env:
   # -- Database URL for PostgreSQL connection
-  DB_URL: "jdbc:postgresql://postgres:5432/template_db"
+  DB_URL: "jdbc:postgresql://unir-tfm-postgres-test.c0li4ko84rxt.us-east-1.rds.amazonaws.com:5432/spring-boot-template-test"
   # -- Database username
-  DB_USERNAME: "postgres"
+  DB_USERNAME: "spring-boot-template-test"
 
 # -- Secret configuration for sensitive data
 secrets:
@@ -53,5 +53,5 @@ secrets:
   secretName: "spring-boot-template-secret"
   data:
     # -- Database password
-    DB_PASSWORD: "postgres"
+    DB_PASSWORD: "spring-boot-template-test"
 
