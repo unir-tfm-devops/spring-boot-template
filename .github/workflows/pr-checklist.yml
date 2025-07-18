@@ -11,5 +11,5 @@ concurrency:
 jobs:
   pr-checks:
     name: PR format
-    uses: unir-tfm-devops/reusable-github-actions/.github/workflows/pr-checks.yml@main
+    uses: unir-tfm-devops/reusable-github-actions/.github/workflows/shared/pr-checks.yml@main
     secrets: inherit

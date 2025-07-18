@@ -11,7 +11,7 @@ concurrency:
 jobs:
   ci-cd:
     name: CI/CD
-    uses: unir-tfm-devops/reusable-github-actions/.github/workflows/ci-cd-release.yml@main
+    uses: unir-tfm-devops/reusable-github-actions/.github/workflows/ci-cd/spring-boot/ci-cd-release.yml@main
     with:
       image-repo-name: "spring-boot-template"
       app-name: "spring-boot-template"
