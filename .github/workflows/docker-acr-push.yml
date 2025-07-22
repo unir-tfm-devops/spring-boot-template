@@ -53,16 +53,16 @@ jobs:
       - name: Log in to ACR
         uses: azure/docker-login@v2
         with:
-          login-server: "springboottemplate.azurecr.io"
+          login-server: "unirtfmdevops.azurecr.io"
           username: ${{ secrets.AZURE_CLIENT_ID }}
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Build image tag
         id: vars
         run: |
-          IMAGE_REPO_NAME=springboottemplate
+          IMAGE_REPO_NAME=spring-boot-template
           IMAGE_TAG=${{ needs.revision.outputs.revision }}
-          IMAGE_URI=springboottemplate.azurecr.io/${IMAGE_REPO_NAME}:${IMAGE_TAG}
+          IMAGE_URI=unirtfmdevops.azurecr.io/${IMAGE_REPO_NAME}:${IMAGE_TAG}
 
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
