@@ -50,28 +50,11 @@ jobs:
       - name: Package
         run: mvn -B -ntp clean package -Drevision=${{ needs.revision.outputs.revision }} -DskipTests=true
 
-      - name: Log in to ACR
-        uses: azure/docker-login@v2
+      - name: Build and push Docker image
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/docker-build-push@main
         with:
-          login-server: "unirtfmdevops.azurecr.io"
-          username: ${{ secrets.AZURE_CLIENT_ID }}
-          password: ${{ secrets.AZURE_CLIENT_SECRET }}
-
-      - name: Build image tag
-        id: vars
-        run: |
-          IMAGE_REPO_NAME=spring-boot-template
-          IMAGE_TAG=${{ needs.revision.outputs.revision }}
-          IMAGE_URI=unirtfmdevops.azurecr.io/${IMAGE_REPO_NAME}:${IMAGE_TAG}
-
-          echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
-
-      - name: Build Docker image
-        shell: bash
-        run: |
-          docker build -t ${{ steps.vars.outputs.image_uri }} .
-
-      - name: Push Docker image
-        shell: bash
-        run: |
-          docker push ${{ steps.vars.outputs.image_uri }}
+          cloud-provider: azure
+          image-repo-name: spring-boot-template
+          image-tag: ${{ needs.revision.outputs.revision }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
