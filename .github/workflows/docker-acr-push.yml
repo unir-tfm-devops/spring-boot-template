@@ -1,0 +1,77 @@
+name: "Docker ACR Push"
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  revision:
+    name: Revision
+    runs-on: [ubuntu-latest]
+    outputs:
+      revision: ${{ steps.revision.outputs.revision }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: "true"
+          fetch-depth: 0
+
+      - name: Get revision
+        id: revision
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [[ "$GITHUB_REF" == "refs/tags/"* ]]; then
+            echo "revision=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
+          else
+            REVISION=$(git describe --tags --always)
+            echo "revision=$REVISION" >> $GITHUB_OUTPUT
+          fi
+
+  docker-acr-push:
+    name: Docker ACR Push
+    needs: revision
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Maven & Java
+        uses: unir-tfm-devops/reusable-github-actions/.github/actions/mvn-setup@main
+        with:
+          java-version: 24
+          maven-version: 3.9.6
+
+      - name: Package
+        run: mvn -B -ntp clean package -Drevision=${{ needs.revision.outputs.revision }} -DskipTests=true
+
+      - name: Log in to ACR
+        uses: azure/docker-login@v2
+        with:
+          login-server: "springboottemplate.azurecr.io"
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Build image tag
+        id: vars
+        run: |
+          IMAGE_REPO_NAME=springboottemplate
+          IMAGE_TAG=${{ needs.revision.outputs.revision }}
+          IMAGE_URI=springboottemplate.azurecr.io/${IMAGE_REPO_NAME}:${IMAGE_TAG}
+
+          echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        shell: bash
+        run: |
+          docker build -t ${{ steps.vars.outputs.image_uri }} .
+
+      - name: Push Docker image
+        shell: bash
+        run: |
+          docker push ${{ steps.vars.outputs.image_uri }}
