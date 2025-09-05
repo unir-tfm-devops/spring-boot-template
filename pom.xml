@@ -18,7 +18,7 @@
   <properties>
     <revision>0.0.0</revision>
     <java.version>24</java.version>
-    <lombok.version>1.18.38</lombok.version>
+    <lombok.version>1.18.40</lombok.version>
     <postgresql.version>42.7.7</postgresql.version>
     <liquibase.version>4.33.0</liquibase.version>
     <instancio.version>5.5.1</instancio.version>
